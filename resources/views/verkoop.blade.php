@@ -1,50 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
+    <div class="container">
+        <div class="row">
             <!-- als er is ingelogd laten zien, anders niet -->
             @if(Session::has('userLoggedIn'))
-                    <div class="col-md-12">
-                      <div class="panel panel-default">
-                        <div class="panel-heading">Welke kaartjes wil jij verkopen?</div>
-                          <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">What tickets do you want to sell?</div>
+                        <div class="panel-body">
                             <form class="form-horizontal" role="form" method="POST" action="/verkoop">
-                              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="userID" value="{{Session::get('userLoggedIn.id')}}">
 
-                              <div class="form-group">
-                                <label class="col-md-2 control-label">Concert</label>
-                                <div class="col-md-8">
-                                  <select class="form-control">
-                                    @foreach($listings as $listing)
-                                      <option id="{{$listing->id}}">{{$listing->description}} - {{$listing->sellingPrice}}</option>
-                                    @endforeach
-                                  </select>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Concert</label>
+                                    <div class="col-md-8">
+                                        <select name="listing" class="form-control">
+                                            @foreach($listings as $listing)
+                                                <option value="{{$listing->id}}">{{$listing->description}} - {{$listing->sellingPrice}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                              </div>
-                              <div class="form-group">
-                                <label class="col-md-2 control-label">Barcode(s)</label>
-                                <div class="col-md-8">
-                                  <input type="text" name="barcodes[]" class="form-control" id="barcode" placeholder="EAN-13:111111111">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Barcode</label>
+                                    <div class="col-md-8">
+                                        <input type="text" name="barcodes[]" class="form-control" placeholder="EAN-13:111111111" style="margin-bottom: 15px">
+                                        @if($errors->any())
+                                            <div class="alert alert-danger">{{$errors->first()}}</div>
+                                        @endif
+                                    </div>
                                 </div>
-                              </div>
 
-                              <a href="#" id="add">Add An Input Field</a>
-                              <div class="form-group" id="button">
-                              	<div class="col-md-6 col-md-offset-5">
-                              	 <button type="submit" class="btn btn-primary" style="margin-right: 15px;">
-                              	    Verkoop!
-                              	 </button>
+                                <a href="#" id="add">add another barcode</a>
+                                <div class="form-group" id="button">
+                                    <div class="col-md-6 col-md-offset-5">
+                                        <button type="submit" class="btn btn-primary">
+                                            Sell!
+                                        </button>
+                                    </div>
                                 </div>
-                              </div>
                             </form>
-                          </div>
-                      </div>
+                        </div>
                     </div>
+                </div>
             @else
                 <h1>Log in om verder te gaan</h1>
             @endif
         </div>
     </div>
-</div>
+    </div>
 @endsection

@@ -43,7 +43,12 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if(Session::has('userLoggedIn'))
-                            <li><a>{{Session::get('userLoggedIn')}}</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{Session::get('userLoggedIn.name')}}<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{url('/logout')}}">logout</a></li>
+                                </ul>
+                            </li>
                         @else
                             <li><a href="{{ url('/login') }}">Login</a></li>
                         @endif

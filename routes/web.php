@@ -11,15 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
+Route::group(array('before' => 'csrf'), function() {
+    Route::get('/', 'LoginController@home');
+
+    Route::get('/login', 'LoginController@showLogin');
+    Route::post('/login', 'LoginController@doLogin');
+    Route::get('/logout', 'LoginController@logout');
+
+    Route::get('/verkoop', 'TicketController@verkoop');
+    Route::post('/verkoop', 'TicketController@addVerkoop');
+
+    Route::get('/koopTicket/{id}', 'TicketController@koopTickets');
 });
-
-Route::get('/tickets', 'TicketController@getTickets');
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/login', 'LoginController@showLogin');
-Route::post('/login', 'LoginController@doLogin');
-
-Route::get('/verkoop', 'TicketController@verkoop');

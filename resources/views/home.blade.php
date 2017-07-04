@@ -5,21 +5,23 @@
     <div class="row">
             <!-- als er is ingelogd laten zien, anders niet -->
             @if(Session::has('userLoggedIn'))
-                <h1>Welkom, {{Session::get('userLoggedIn')}}.</h1>
-                <a class="btn btn-default" href="/verkoop" role="button">Verkoop je kaarten</a>
-                <h3> Hier zijn alle te koop aangeboden kaartjes.</h3>
+                <h1>Welcome, {{Session::get('userLoggedIn.name')}}.</h1>
+                <a class="btn btn-default" href="/verkoop" role="button">Sell your tickets</a>
+                <h3>All tickets are listed below here.</h3>
                 @foreach($listings as $listing)
                     <div class="col-md-3">
                       <div class="panel panel-default">
                         <div class="panel-heading">
                           {{$listing->description}} <br>
-                          Verkoopprijs: {{$listing->sellingPrice}}
+                          Sellingprice: {{$listing->sellingPrice}}
                         </div>
                           @foreach($listing->tickets as $ticket)
                             @if($ticket->boughtByUserId == null)
-                              <div class="panel-body"><h4>{{$ticket->barcodes->count()}} kaart(en) aangeboden</h4>
+                              <div class="panel-body">
+                                  <a href="/koopTicket/{{$ticket->id}}">Koop</a>
+                                  <h4>{{$ticket->barcodes->count()}} Ticket on sale</h4>
                             @else
-                              <div class="panel-body"><h4>{{$ticket->barcodes->count()}} kaart(en) verkocht</h4>
+                              <div class="panel-body"><h4>{{$ticket->barcodes->count()}} Tickets sold </h4>
                             @endif
                             <ul class="list-group">
                             @foreach($ticket->barcodes as $barcode)
@@ -32,7 +34,32 @@
                     </div>
                 @endforeach
             @else
-                <h1>Log in om verder te gaan</h1>
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Login</div>
+                        <div class="panel-body">
+
+                            <form class="form-horizontal" role="form" method="POST" action="/login">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">User ID</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" name="id">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-6 col-md-offset-4">
+                                        <button type="submit" class="btn btn-primary" style="margin-right: 15px;">
+                                            Login
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             @endif
         </div>
     </div>
